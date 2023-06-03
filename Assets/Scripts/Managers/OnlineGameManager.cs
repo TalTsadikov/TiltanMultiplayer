@@ -17,6 +17,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     public const string NETWORK_PLAYER_PREFAB_NAME_RED = "NetworkPlayerObjectRed";
     public string playerPrefab;
     [SerializeField] GameObject chooseCharacterMenu;
+    bool chooseCharacters = false;
 
     private const string GAME_STARTED_RPC = nameof(GameStarted);
     private const string COUNTDOWN_STARTED_RPC = nameof(CountdownStarted);
@@ -99,14 +100,30 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
             messageInfo.Sender, chosenSpawnPoint.ID,
             takenSpawnPoints);
     }
-
   
     public void ChooseCharacter(string playerConstName)
     {
+        int iterator = 0;
         playerPrefab = playerConstName;
         photonView.RPC(ASK_FOR_RANDOM_SPAWN_POINT_RPC, RpcTarget.MasterClient);
         chooseCharacterMenu.SetActive(false);
         Debug.Log(playerConstName);
+
+        foreach (var player in PhotonNetwork.CurrentRoom.Players)
+        {
+            if (player.Value.CustomProperties.ContainsKey(chooseCharacters))
+            {
+                if (chooseCharacters)
+                {
+                   iterator++;
+                }
+            }
+        }
+
+        if (iterator == PhotonNetwork.CurrentRoom.PlayerCount)
+        {
+            startGameButtonUI.interactable = true;
+        }
     }
 
     [PunRPC]
@@ -130,6 +147,8 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        startGameButtonUI.interactable = false;
+
         if (PhotonNetwork.IsConnectedAndReady)
         {
             // localPlayerController =
