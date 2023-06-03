@@ -10,13 +10,21 @@ using Random = UnityEngine.Random;
 
 public class OnlineGameManager : MonoBehaviourPunCallbacks
 {
-    public const string NETWORK_PLAYER_PREFAB_NAME = "NetworkPlayerObject";
- 
+    public const string NETWORK_PLAYER_PREFAB_NAME_YELLOW = "NetworkPlayerObjectYellow";
+    public const string NETWORK_PLAYER_PREFAB_NAME_BLUE = "NetworkPlayerObjectBlue";
+    public const string NETWORK_PLAYER_PREFAB_NAME_GREEN = "NetworkPlayerObjectGreen";
+    public const string NETWORK_PLAYER_PREFAB_NAME_PURPLE = "NetworkPlayerObjectPurple";
+    public const string NETWORK_PLAYER_PREFAB_NAME_RED = "NetworkPlayerObjectRed";
+    public string playerPrefab;
+    bool chosePrefab = false;
+    [SerializeField] GameObject chooseCharacterMenu;
+
     private const string GAME_STARTED_RPC = nameof(GameStarted);
     private const string COUNTDOWN_STARTED_RPC = nameof(CountdownStarted);
     private const string ASK_FOR_RANDOM_SPAWN_POINT_RPC = nameof(AskForRandomSpawnPoint);
     private const string SPAWN_PLAYER_CLIENT_RPC = nameof(SpawnPlayer);
-
+    private const string CHOOSE_CHARACTER_RPC = nameof(ChooseCharacter);
+    
     private int someVariable;
     public bool hasGameStarted = false;
 
@@ -26,30 +34,30 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private Button startGameButtonUI;
     [SerializeField] private SpawnPoint[] spawnPoints;
-    
+
     private PlayerController localPlayerController;
 
     private bool isCountingForStartGame;
     private float timeLeftForStartGame = 0;
-    
+
     public void StartGameCountdown()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             int countdownRandomTime = Random.Range(3, 8);
             photonView.RPC(COUNTDOWN_STARTED_RPC,
-                RpcTarget.AllViaServer, countdownRandomTime );
+                RpcTarget.AllViaServer, countdownRandomTime);
             startGameButtonUI.interactable = false;
         }
     }
-    
+
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         base.OnMasterClientSwitched(newMasterClient);
         Debug.Log("Masterclient has been switched!" + Environment.NewLine
         + "Masterclient is now actor number " + newMasterClient.ActorNumber);
     }
-    
+
     #region RPCS
 
     [PunRPC]
@@ -59,7 +67,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         timeLeftForStartGame = countdownTime;
         countdownText.gameObject.SetActive(true);
     }
-    
+
     [PunRPC]
     void GameStarted()
     {
@@ -75,14 +83,14 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         List<SpawnPoint> availableSpawnPoints = new List<SpawnPoint>();
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
-            if(!spawnPoint.taken)
-             availableSpawnPoints.Add(spawnPoint);
+            if (!spawnPoint.taken)
+                availableSpawnPoints.Add(spawnPoint);
         }
 
         SpawnPoint chosenSpawnPoint =
             availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count)];
         chosenSpawnPoint.taken = true;
-        
+
         bool[] takenSpawnPoints = new bool[spawnPoints.Length];
         for (int i = 0; i < spawnPoints.Length; i++)
         {
@@ -94,26 +102,37 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    public void ChooseCharacter(string playerConstName)
+    {
+        playerPrefab = playerConstName;
+        chosePrefab = true;
+        photonView.RPC(ASK_FOR_RANDOM_SPAWN_POINT_RPC, RpcTarget.MasterClient);
+        chooseCharacterMenu.SetActive(false);
+        Debug.Log(playerConstName);
+    }
+
+    [PunRPC]
     void SpawnPlayer(int spawnPointID, bool[] takenSpawnPoints)
     {
         SpawnPoint spawnPoint = GetSpawnPointByID(spawnPointID);
         localPlayerController =
-            PhotonNetwork.Instantiate(NETWORK_PLAYER_PREFAB_NAME, 
-                    spawnPoint.transform.position, 
+            PhotonNetwork.Instantiate(playerPrefab,
+                    spawnPoint.transform.position,
                     spawnPoint.transform.rotation)
                 .GetComponent<PlayerController>();
-        
+
         for (int i = 0; i < takenSpawnPoints.Length; i++)
         {
             spawnPoints[i].taken = takenSpawnPoints[i];
         }
-        
+
     }
-    
+
     #endregion
 
     void Start()
     {
+        chosePrefab = false;
         if (PhotonNetwork.IsConnectedAndReady)
         {
             // localPlayerController =
@@ -121,7 +140,8 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
             //             spawnPoints[PhotonNetwork.LocalPlayer.ActorNumber - 1].position, 
             //             spawnPoints[PhotonNetwork.LocalPlayer.ActorNumber - 1].rotation)
             //         .GetComponent<PlayerController>();
-            photonView.RPC(ASK_FOR_RANDOM_SPAWN_POINT_RPC, RpcTarget.MasterClient);
+            photonView.RPC(CHOOSE_CHARACTER_RPC, RpcTarget.AllViaServer, playerPrefab);
+
             if (PhotonNetwork.IsMasterClient)
             {
                 startGameButtonUI.interactable = true;
