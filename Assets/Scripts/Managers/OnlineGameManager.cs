@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
 
 public class OnlineGameManager : MonoBehaviourPunCallbacks
 {
@@ -112,7 +115,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
 
         ExitGames.Client.Photon.Hashtable hashtable
         = new ExitGames.Client.Photon.Hashtable();
-        hashtable.Add(chooseCharacters, chooseCharacters);
+        hashtable.Add(chooseCharacters, true);
         PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
 
         foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
