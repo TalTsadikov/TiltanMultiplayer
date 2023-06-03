@@ -106,8 +106,14 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         int iterator = 0;
         playerPrefab = playerConstName;
         photonView.RPC(ASK_FOR_RANDOM_SPAWN_POINT_RPC, RpcTarget.MasterClient);
+        chooseCharacters = true;
         chooseCharacterMenu.SetActive(false);
         Debug.Log(playerConstName);
+
+        ExitGames.Client.Photon.Hashtable hashtable
+        = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add(chooseCharacters, chooseCharacters);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
 
         foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
         {
@@ -149,6 +155,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         startGameButtonUI.interactable = false;
+       
 
         if (PhotonNetwork.IsConnectedAndReady)
         {
