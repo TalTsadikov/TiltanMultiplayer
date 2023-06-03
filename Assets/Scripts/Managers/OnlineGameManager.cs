@@ -109,7 +109,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         chooseCharacterMenu.SetActive(false);
         Debug.Log(playerConstName);
 
-        foreach (var player in PhotonNetwork.CurrentRoom.Players)
+        foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
         {
             if (player.Value.CustomProperties.ContainsKey(chooseCharacters))
             {
