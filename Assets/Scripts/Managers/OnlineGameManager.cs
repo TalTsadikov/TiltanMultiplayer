@@ -116,6 +116,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
                 if (chooseCharacters)
                 {
                    iterator++;
+                    Debug.Log(iterator);
                 }
             }
         }
