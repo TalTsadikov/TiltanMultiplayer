@@ -1224,7 +1224,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: NETWORK_PLAYER_PREFAB_NAME_YELLOW
+          m_StringArgument: NetworkPlayerObjectYellow
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &702488483
@@ -1358,7 +1358,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: NETWORK_PLAYER_PREFAB_NAME_GREEN
+          m_StringArgument: NetworkPlayerObjectGreen
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &747748176
@@ -1492,7 +1492,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: NETWORK_PLAYER_PREFAB_NAME_RED
+          m_StringArgument: NetworkPlayerObjectRed
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &810953741
@@ -1931,7 +1931,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: NETWORK_PLAYER_PREFAB_NAME_PURPLE
+          m_StringArgument: NetworkPlayerObjectPurple
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1282403639
@@ -2065,7 +2065,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: NETWORK_PLAYER_PREFAB_NAME_BLUE
+          m_StringArgument: NetworkPlayerObjectBlue
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1301656702
