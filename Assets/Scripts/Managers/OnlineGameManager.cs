@@ -111,9 +111,9 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
 
         foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
         {
-            if (player.Value.CustomProperties.TryGetValue(chooseCharacters, out object hasChosen))
+            if (player.Value.CustomProperties.ContainsKey(chooseCharacters))
             {
-                if ((bool)hasChosen)
+                if (chooseCharacters)
                 {
                     iterator++;
                     Debug.Log(iterator);
