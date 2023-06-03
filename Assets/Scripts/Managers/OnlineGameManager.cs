@@ -120,7 +120,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (iterator == PhotonNetwork.CurrentRoom.PlayerCount)
+        if (iterator == PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.IsMasterClient)
         {
             startGameButtonUI.interactable = true;
         }
@@ -157,11 +157,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
             //             spawnPoints[PhotonNetwork.LocalPlayer.ActorNumber - 1].rotation)
             //         .GetComponent<PlayerController>();
             //photonView.RPC(CHOOSE_CHARACTER_RPC, RpcTarget.AllViaServer, playerPrefab);
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                startGameButtonUI.interactable = true;
-            }
 
             gameModeText.text = PhotonNetwork.CurrentRoom.CustomProperties[Constants.GAME_MODE].ToString();
             foreach (KeyValuePair<int, Player>
