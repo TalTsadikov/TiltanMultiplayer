@@ -25,5 +25,6 @@ public class CheckPoint : MonoBehaviour, IPunObservable
     private void OnTriggerEnter(Collider other)
     {
         players.Add(other.gameObject);
+        Debug.Log("player");
     }
 }
