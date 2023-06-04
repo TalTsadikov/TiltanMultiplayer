@@ -22,9 +22,9 @@ public class CheckPoint : MonoBehaviour, IPunObservable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        players.Add(other.gameObject);
+        players.Add(collision.gameObject);
         Debug.Log("player");
     }
 }

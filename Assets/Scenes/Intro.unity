@@ -3962,7 +3962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nicknameInputField: {fileID: 1944896977}
   createRoomButton: {fileID: 1749113437}
-  roomNameToCreate: AlonTest
+  roomNameToCreate: AlonTest1
   leaveRoomButton: {fileID: 1784338345}
   startGameButton: {fileID: 907836613}
   serverDebugTextUI: {fileID: 306076097}
