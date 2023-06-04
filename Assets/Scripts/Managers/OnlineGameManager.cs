@@ -12,11 +12,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class OnlineGameManager : MonoBehaviourPunCallbacks
 {
-    public const string NETWORK_PLAYER_PREFAB_NAME_YELLOW = "NetworkPlayerObjectYellow";
-    public const string NETWORK_PLAYER_PREFAB_NAME_BLUE = "NetworkPlayerObjectBlue";
-    public const string NETWORK_PLAYER_PREFAB_NAME_GREEN = "NetworkPlayerObjectGreen";
-    public const string NETWORK_PLAYER_PREFAB_NAME_PURPLE = "NetworkPlayerObjectPurple";
-    public const string NETWORK_PLAYER_PREFAB_NAME_RED = "NetworkPlayerObjectRed";
     public string playerPrefab;
     [SerializeField] GameObject chooseCharacterMenu;
     public bool chooseCharacters = false;
@@ -28,6 +23,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     private const string SPAWN_PLAYER_CLIENT_RPC = nameof(SpawnPlayer);
     private const string CHOOSE_CHARACTER_RPC = nameof(ChooseCharacter);
     private const string CHECK_IF_CAN_START = nameof(CheckIfCanStart);
+    private const string DISPLAY_PLAYER_NAME = nameof(DisplayPlayerName);
 
     private int someVariable;
     public bool hasGameStarted = false;
@@ -136,8 +132,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
                     spawnPoint.transform.rotation)
                 .GetComponent<PlayerController>();
 
-        playerNameText =  localPlayerController.GetComponentInChildren<TextMeshProUGUI>();
-        playerNameText.text = PhotonNetwork.NickName;
+        photonView.RPC(DISPLAY_PLAYER_NAME, RpcTarget.AllViaServer);
 
         for (int i = 0; i < takenSpawnPoints.Length; i++)
         {
@@ -145,6 +140,12 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    void DisplayPlayerName()
+    {
+        playerNameText = localPlayerController.GetComponentInChildren<TextMeshProUGUI>();
+        playerNameText.text = PhotonNetwork.NickName;
+    }
     #endregion
 
     void Start()
