@@ -136,7 +136,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
                     spawnPoint.transform.rotation)
                 .GetComponent<PlayerController>();
 
-        playerNameText =  localPlayerController.GetComponent<TextMeshProUGUI>();
+        playerNameText =  localPlayerController.GetComponentInChildren<TextMeshProUGUI>();
         playerNameText.text = PhotonNetwork.NickName;
 
         for (int i = 0; i < takenSpawnPoints.Length; i++)
