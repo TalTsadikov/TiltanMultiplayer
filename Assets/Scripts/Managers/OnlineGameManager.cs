@@ -32,6 +32,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     private int someVariable;
     public bool hasGameStarted = false;
 
+    [SerializeField] private TextMeshProUGUI playerNameText;
     [SerializeField] private TextMeshProUGUI gameModeText;
     [SerializeField] private TextMeshProUGUI playersScoreText;
     [SerializeField] private TextMeshProUGUI currentSpawnPointsInfoText;
@@ -111,27 +112,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         chooseCharacterMenu.SetActive(false);
         Debug.Log(playerConstName);
 
-       // Hashtable hashtable
-       // = new Hashtable();
-       // hashtable.Add(chooseCharacters, true);
-       // PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
-       // chooseCharacters = (bool)PhotonNetwork.LocalPlayer.CustomProperties["ChoseCharacter"];
-       // chooseCharacters = true;
-       // Hashtable hash = new Hashtable();
-       // hash.Add("ChoseCharacter", chooseCharacters);
-       // PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-       //
-       // foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
-       // {
-       //     if (player.Value.CustomProperties.ContainsKey(chooseCharacters))
-       //     {
-       //         if (chooseCharacters)
-       //         {
-       //             Debug.Log(iterator);
-       //         }
-       //     }
-       // }
-
         photonView.RPC(CHECK_IF_CAN_START, RpcTarget.MasterClient);
     }
 
@@ -155,6 +135,9 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
                     spawnPoint.transform.position,
                     spawnPoint.transform.rotation)
                 .GetComponent<PlayerController>();
+
+        playerNameText =  localPlayerController.GetComponent<TextMeshProUGUI>();
+        playerNameText.text = PhotonNetwork.NickName;
 
         for (int i = 0; i < takenSpawnPoints.Length; i++)
         {
