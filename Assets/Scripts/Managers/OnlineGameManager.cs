@@ -12,8 +12,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class OnlineGameManager : MonoBehaviourPunCallbacks
 {
-    public string playerPrefab;
     [SerializeField] GameObject chooseCharacterMenu;
+    public string playerPrefab;
     public bool chooseCharacters = false;
     int iterator = 0;
 
@@ -23,7 +23,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     private const string SPAWN_PLAYER_CLIENT_RPC = nameof(SpawnPlayer);
     private const string CHOOSE_CHARACTER_RPC = nameof(ChooseCharacter);
     private const string CHECK_IF_CAN_START = nameof(CheckIfCanStart);
-    private const string DISPLAY_PLAYER_NAME = nameof(DisplayPlayerName);
 
     private int someVariable;
     public bool hasGameStarted = false;
@@ -139,12 +138,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         {
             spawnPoints[i].taken = takenSpawnPoints[i];
         }
-    }
-
-    [PunRPC]
-    void DisplayPlayerName(PlayerController player)
-    {
-       
     }
     #endregion
 
