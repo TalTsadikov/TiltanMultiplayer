@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 6027852564424635224}
   - component: {fileID: -5555260587308999388}
   - component: {fileID: -4431128098030494942}
+  - component: {fileID: -2241327468454398433}
   m_Layer: 0
   m_Name: NetworkPlayerObjectGreen
   m_TagString: Untagged
@@ -202,6 +203,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNameText: {fileID: 3655688241392660772}
   photonView: {fileID: 6027852564424635224}
+--- !u!114 &-2241327468454398433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2728670869534550612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7262bd2f477da6e499b3e471bc0acd86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!1 &2728670869627829203
 GameObject:
   m_ObjectHideFlags: 0
