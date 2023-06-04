@@ -132,7 +132,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
                     spawnPoint.transform.rotation)
                 .GetComponent<PlayerController>();
 
-        photonView.RPC(DISPLAY_PLAYER_NAME, RpcTarget.AllViaServer);
+        photonView.RPC(DISPLAY_PLAYER_NAME, RpcTarget.AllViaServer, localPlayerController);
 
         for (int i = 0; i < takenSpawnPoints.Length; i++)
         {
@@ -141,9 +141,9 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void DisplayPlayerName()
+    void DisplayPlayerName(PlayerController player)
     {
-        playerNameText = localPlayerController.GetComponentInChildren<TextMeshProUGUI>();
+        playerNameText = player.GetComponentInChildren<TextMeshProUGUI>();
         playerNameText.text = PhotonNetwork.NickName;
     }
     #endregion
