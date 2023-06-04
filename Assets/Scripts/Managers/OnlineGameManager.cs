@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
-using ExitGames.Client.Photon;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,12 +20,14 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     public string playerPrefab;
     [SerializeField] GameObject chooseCharacterMenu;
     public bool chooseCharacters = false;
+    int iterator = 0;
 
     private const string GAME_STARTED_RPC = nameof(GameStarted);
     private const string COUNTDOWN_STARTED_RPC = nameof(CountdownStarted);
     private const string ASK_FOR_RANDOM_SPAWN_POINT_RPC = nameof(AskForRandomSpawnPoint);
     private const string SPAWN_PLAYER_CLIENT_RPC = nameof(SpawnPlayer);
     private const string CHOOSE_CHARACTER_RPC = nameof(ChooseCharacter);
+    private const string CHECK_IF_CAN_START = nameof(CheckIfCanStart);
 
     private int someVariable;
     public bool hasGameStarted = false;
@@ -39,7 +40,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     [SerializeField] private SpawnPoint[] spawnPoints;
 
     private PlayerController localPlayerController;
-
     private bool isCountingForStartGame;
     private float timeLeftForStartGame = 0;
 
@@ -62,7 +62,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     }
 
     #region RPCS
-
     [PunRPC]
     void CountdownStarted(int countdownTime)
     {
@@ -106,29 +105,40 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
 
     public void ChooseCharacter(string playerConstName)
     {
-        int iterator = 0;
         playerPrefab = playerConstName;
         photonView.RPC(ASK_FOR_RANDOM_SPAWN_POINT_RPC, RpcTarget.MasterClient);
-        chooseCharacters = true;
+        
         chooseCharacterMenu.SetActive(false);
         Debug.Log(playerConstName);
 
-        ExitGames.Client.Photon.Hashtable hashtable
-        = new ExitGames.Client.Photon.Hashtable();
-        hashtable.Add(chooseCharacters, true);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+       // Hashtable hashtable
+       // = new Hashtable();
+       // hashtable.Add(chooseCharacters, true);
+       // PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+       // chooseCharacters = (bool)PhotonNetwork.LocalPlayer.CustomProperties["ChoseCharacter"];
+       // chooseCharacters = true;
+       // Hashtable hash = new Hashtable();
+       // hash.Add("ChoseCharacter", chooseCharacters);
+       // PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+       //
+       // foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+       // {
+       //     if (player.Value.CustomProperties.ContainsKey(chooseCharacters))
+       //     {
+       //         if (chooseCharacters)
+       //         {
+       //             Debug.Log(iterator);
+       //         }
+       //     }
+       // }
 
-        foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
-        {
-            if (player.Value.CustomProperties.ContainsKey(chooseCharacters))
-            {
-                if (chooseCharacters)
-                {
-                    iterator++;
-                    Debug.Log(iterator);
-                }
-            }
-        }
+        photonView.RPC(CHECK_IF_CAN_START, RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    void CheckIfCanStart()
+    {
+        iterator++;
 
         if (iterator == PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.IsMasterClient)
         {
@@ -150,7 +160,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         {
             spawnPoints[i].taken = takenSpawnPoints[i];
         }
-
     }
 
     #endregion
@@ -158,7 +167,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         startGameButtonUI.interactable = false;
-       
+        iterator = 0;
 
         if (PhotonNetwork.IsConnectedAndReady)
         {
@@ -167,7 +176,6 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
             //             spawnPoints[PhotonNetwork.LocalPlayer.ActorNumber - 1].position, 
             //             spawnPoints[PhotonNetwork.LocalPlayer.ActorNumber - 1].rotation)
             //         .GetComponent<PlayerController>();
-            //photonView.RPC(CHOOSE_CHARACTER_RPC, RpcTarget.AllViaServer, playerPrefab);
 
             gameModeText.text = PhotonNetwork.CurrentRoom.CustomProperties[Constants.GAME_MODE].ToString();
             foreach (KeyValuePair<int, Player>
@@ -229,6 +237,4 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
 
         return null;
     }
-
-
 }
